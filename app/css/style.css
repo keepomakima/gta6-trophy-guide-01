@@ -1,0 +1,157 @@
+/* Leonida Platinum Playbook — Vice sunset theme, system fonts only, no network. */
+:root {
+  --bg: #17101c;
+  --bg-soft: #211426;
+  --panel: #f7f1e8;
+  --panel-2: #fffdf8;
+  --ink: #241a2e;
+  --muted: #6d5f74;
+  --line: #e3d5c6;
+  --accent: #c2410c;
+  --accent-soft: #fde8dd;
+  --pink: #e11d74;
+  --gold: #b8860b;
+  --silver: #6b7280;
+  --bronze: #9a6b3f;
+  --platinum: #4b5563;
+  --ok: #166534;
+  --danger: #b91c1c;
+  --radius: 12px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; line-height: 1.15; margin: 0; }
+.top {
+  display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: flex-end;
+  padding: 28px 28px 20px;
+  background: linear-gradient(135deg, #2b1230 0%, #5b1a3a 55%, #c2410c 100%);
+  color: #fdf6ee;
+}
+.eyebrow { margin: 0 0 6px; text-transform: uppercase; letter-spacing: .14em; font-size: 11px; color: #f5c9a8; }
+.top h1 { font-size: 40px; letter-spacing: -.01em; }
+.tagline { margin: 8px 0 0; max-width: 560px; color: #f3ddd0; font-size: 15px; }
+.progress-card {
+  background: var(--panel-2); color: var(--ink);
+  border-radius: var(--radius); padding: 14px 18px; min-width: 260px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+}
+.big-count { font-family: Georgia, serif; font-size: 34px; margin: 0; line-height: 1; }
+.big-count .of { font-size: 18px; color: var(--muted); }
+.bar { height: 10px; background: #e8ddcf; border-radius: 6px; margin: 10px 0 6px; overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pink), var(--accent)); transition: width .3s; }
+.progress-label { margin: 0; font-weight: 600; }
+.grade-counts { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+.views { display: flex; gap: 8px; padding: 14px 28px 0; background: var(--bg); }
+.view-tab {
+  border: 1px solid #4a2b4d; background: transparent; color: #f3ddd0;
+  padding: 9px 16px; border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 600;
+}
+.view-tab.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+.view-tab .pill { background: #fff; color: var(--pink); border-radius: 999px; padding: 0 7px; margin-left: 2px; font-size: 12px; }
+main { padding: 18px 28px 32px; }
+.view { display: none; }
+.view.active { display: block; }
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: flex-end;
+  background: var(--panel); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px;
+}
+.toolbar label, .toolbar fieldset { font-size: 13px; font-weight: 600; color: var(--muted); }
+.search-box input {
+  display: block; width: 260px; max-width: 70vw; margin-top: 4px;
+  padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; background: #fff;
+}
+.chips { border: 0; margin: 0; padding: 0; }
+.chips legend { padding: 0; margin-bottom: 4px; }
+.chip {
+  border: 1px solid var(--line); background: #fff; border-radius: 999px;
+  padding: 6px 12px; margin-right: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
+}
+.chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.select-box select { display: block; margin-top: 4px; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 14px; }
+.check { display: flex; align-items: center; gap: 6px; padding-bottom: 8px; cursor: pointer; }
+.check input { width: 16px; height: 16px; accent-color: var(--pink); }
+.save-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.save-actions button, .detail button {
+  border: 1px solid var(--ink); background: #fff; border-radius: 8px;
+  padding: 8px 12px; cursor: pointer; font-size: 13px; font-weight: 600;
+}
+.save-actions button:hover { background: var(--accent-soft); }
+.save-actions button.danger { border-color: var(--danger); color: var(--danger); }
+.result-line { color: #e8cdb8; margin: 0 0 12px; font-size: 13.5px; }
+.guide-grid { display: grid; grid-template-columns: minmax(380px, 460px) 1fr; gap: 16px; align-items: start; }
+.list-col { background: var(--panel); border-radius: var(--radius); padding: 8px; }
+.trophy-list { list-style: none; margin: 0; padding: 0; max-height: 640px; overflow-y: auto; }
+.trophy-list li {
+  display: flex; gap: 10px; padding: 10px; border-radius: 9px; cursor: pointer;
+  border: 1px solid transparent;
+}
+.trophy-list li:hover { background: #fff; }
+.trophy-list li.selected { background: #fff; border-color: var(--accent); }
+.trophy-list li.earned { background: #eef7ee; }
+.trophy-list li.earned.selected { border-color: var(--ok); }
+.trophy-list input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ok); flex: none; }
+.medal {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: #fff; margin-top: 1px;
+}
+.medal.Platinum { background: var(--platinum); }
+.medal.Gold { background: var(--gold); }
+.medal.Silver { background: var(--silver); }
+.medal.Bronze { background: var(--bronze); }
+.row-body { min-width: 0; }
+.row-name { font-weight: 700; font-size: 14.5px; }
+.row-desc { color: var(--muted); font-size: 13px; }
+.row-tags { margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  background: #efe6d8; border-radius: 999px; padding: 2px 8px; color: #5b4a3a;
+}
+.tag.missable { background: #fde8e8; color: var(--danger); }
+.tag.hidden-flag { background: #e8e4f5; color: #4c3a8c; }
+.tag.unconfirmed { background: #fef3c7; color: #92400e; }
+.tag.earned-tag { background: #dcfce7; color: var(--ok); }
+.detail {
+  background: var(--panel-2); border-radius: var(--radius); padding: 20px 22px;
+  position: sticky; top: 12px; min-height: 420px;
+}
+.detail h2 { color: var(--ink); }
+.detail h2 { font-size: 26px; margin: 6px 0 4px; }
+.detail .official { font-style: italic; color: #4a3a52; border-left: 3px solid var(--pink); padding-left: 10px; margin: 12px 0; }
+.detail h3 { font-size: 15px; font-family: inherit; margin: 16px 0 6px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.detail p { margin: 6px 0; }
+.detail .guide-text { font-size: 15.5px; }
+.callout { background: #fde8e8; border: 1px solid #f5b5b5; border-radius: 9px; padding: 10px 12px; margin: 12px 0; }
+.callout strong { color: var(--danger); }
+.note-box { background: #fef3c7; border: 1px solid #f2d38a; border-radius: 9px; padding: 10px 12px; margin: 12px 0; }
+.sources { list-style: none; margin: 6px 0 0; padding: 0; }
+.sources li { margin: 4px 0; font-size: 13.5px; }
+.sources a { color: var(--accent); }
+.detail .next-up { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+h2 { color: #fdf6ee; font-size: 28px; margin: 4px 0 8px; }
+#viewRoadmap h2, #viewMissable h2 { color: #fdf6ee; }
+.section-intro { color: #e8cdb8; max-width: 720px; }
+.phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
+.phase { background: var(--panel-2); border-radius: var(--radius); padding: 18px; }
+.phase h3 { font-size: 19px; margin-bottom: 4px; }
+.phase .phase-meta { color: var(--muted); font-size: 13px; margin: 0 0 8px; }
+.phase ul { margin: 8px 0 0; padding-left: 18px; }
+.phase li { margin: 5px 0; font-size: 14px; }
+.phase .phase-progress { font-weight: 700; color: var(--ok); }
+.missable-card { background: var(--panel-2); border-radius: var(--radius); padding: 20px; max-width: 780px; margin-top: 14px; }
+.missable-card h3 { font-size: 20px; }
+.plain-list { color: #f3ddd0; max-width: 720px; }
+.plain-list li { margin: 6px 0; }
+footer { padding: 8px 28px 28px; color: #b9a3b8; font-size: 13px; max-width: 860px; }
+footer .fine { color: #8d7a8c; }
+@media (max-width: 900px) {
+  .guide-grid { grid-template-columns: 1fr; }
+  .detail { position: static; }
+  .top h1 { font-size: 30px; }
+  main, .views { padding-left: 14px; padding-right: 14px; }
+}

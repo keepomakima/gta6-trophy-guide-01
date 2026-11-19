@@ -1,10 +1,14 @@
-// spoilers: while the spoiler setting is on, a story trophy that has not been
-// earned yet shows a mask instead of its name and description. Earning it (or
-// switching the setting off) reveals it. Non-story trophies are never masked.
-
-export function isSpoilerHidden(trophy, earned, spoilerOn) {
-  return spoilerOn && trophy.kind === 'story' && !earned.has(trophy.name);
+/** The spoiler rule: story trophies stay masked until earned, when the setting is on. */
+export function isSpoilerHidden(trophy, spoilersOn, earned) {
+  return spoilersOn && trophy.kind === 'story' && !earned;
 }
 
-export const SPOILER_MASK_NAME = 'Hidden story trophy';
-export const SPOILER_MASK_DESC = 'Name and description hidden until earned — turn the spoiler setting off, or tick it earned, to reveal this trophy.';
+/** The masked name shown for a hidden story trophy. */
+export function spoilerName() {
+  return 'Hidden story trophy';
+}
+
+/** The masked description shown for a hidden story trophy. */
+export function spoilerDescription() {
+  return 'Earn this trophy in the story to reveal its name and description.';
+}
