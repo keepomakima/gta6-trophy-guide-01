@@ -1,59 +1,66 @@
-// Leonida Trophy Compass v4 — a small local static server for testing the app.
-// Node 22 standard library only. Serves the repository root so the guide opens
-// at /app/ ; / redirects there. Paths that climb out of the root get a 403,
-// missing files a 404. Usage: node serve.ts [port]  (default 8123).
-
+// A tiny static server for app/ (Node 22, standard library only), so the
+// guide can be run locally without a build step:
+//   node serve.ts            -> http://localhost:8123/app/
+//   node serve.ts --port 8080
+// It sends the MIME types a browser needs, refuses any path outside app/,
+// and otherwise does nothing clever. Development convenience only.
+import { createReadStream, statSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { dirname, extname, join, resolve, sep } from 'node:path';
+import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)));
-const port = Number(process.argv[2] || process.env.PORT || 8123);
+const root = resolve(fileURLToPath(new URL('./app', import.meta.url)));
+const args = process.argv.slice(2);
+const portIndex = args.indexOf('--port');
+const wanted = portIndex === -1 ? 8123 : Number(args[portIndex + 1]);
+const port = Number.isInteger(wanted) && wanted > 0 && wanted < 65536 ? wanted : 8123;
 
-const TYPES: Record<string, string> = {
+const MIME = {
   '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
-  '.png': 'image/png',
-  '.svg': 'image/svg+xml',
-  '.txt': 'text/plain; charset=utf-8',
+  '.webp': 'image/webp',
+  '.ico': 'image/x-icon',
 };
 
-const server = createServer(async (req, res) => {
+createServer((request, response) => {
+  const url = new URL(request.url ?? '/', 'http://localhost');
+  let pathname;
   try {
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-      res.writeHead(405, { 'content-type': 'text/plain; charset=utf-8' });
-      res.end('Method not allowed\n');
-      return;
-    }
-    const url = new URL(req.url || '/', 'http://localhost');
-    let pathname = decodeURIComponent(url.pathname);
-    if (pathname === '/') pathname = '/app/index.html';
-    const file = resolve(join(root, '.' + pathname));
-    if (file !== root && !file.startsWith(root + sep)) {
-      res.writeHead(403, { 'content-type': 'text/plain; charset=utf-8' });
-      res.end('Forbidden\n');
-      return;
-    }
-    const body = await readFile(file);
-    res.writeHead(200, {
-      'content-type': TYPES[extname(file).toLowerCase()] || 'application/octet-stream',
-      'content-length': body.length,
-      'cache-control': 'no-store',
-    });
-    res.end(req.method === 'HEAD' ? undefined : body);
-  } catch (err) {
-    const code = (err as NodeJS.ErrnoException).code === 'ENOENT' ? 404 : 500;
-    res.writeHead(code, { 'content-type': 'text/plain; charset=utf-8' });
-    res.end(code === 404 ? 'Not found\n' : 'Server error\n');
+    pathname = decodeURIComponent(url.pathname);
+  } catch {
+    response.writeHead(400).end('bad request');
+    return;
   }
-});
-
-server.listen(port, () => {
-  console.log(`Leonida Trophy Compass serving at http://localhost:${port}/app/`);
+  if (pathname === '/app' || pathname === '/app/') pathname = '/app/index.html';
+  if (pathname.startsWith('/app/')) pathname = pathname.slice(4);
+  if (pathname.endsWith('/')) pathname += 'index.html';
+  const file = resolve(join(root, normalize(pathname)));
+  if (file !== root && !file.startsWith(root + sep)) {
+    response.writeHead(403).end('forbidden');
+    return;
+  }
+  let size;
+  try {
+    const stats = statSync(file);
+    if (!stats.isFile()) throw new Error('not a file');
+    size = stats.size;
+  } catch {
+    response.writeHead(404).end('not found');
+    return;
+  }
+  response.writeHead(200, {
+    'content-type': MIME[extname(file).toLowerCase()] ?? 'application/octet-stream',
+    'content-length': size,
+    'cache-control': 'no-store',
+  });
+  createReadStream(file).pipe(response);
+}).listen(port, '127.0.0.1', () => {
+  console.log(`app/ is on http://localhost:${port}/app/`);
 });

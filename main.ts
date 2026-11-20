@@ -1,27 +1,39 @@
-// Leonida Trophy Compass v4 — the entry program (Node 22 standard library only).
+// Leonida Trophy Compass v5 — the entry program (Node 22, standard library only).
 //
-// It copies app/ and screenshots/ into the output directory and writes
-// /output/dossier.json with the kit's buildDossier library.
+// It hands in the guide: copies app/ and screenshots/ from beside this file
+// into the output directory and writes /output/dossier.json with the kit's
+// buildDossier library, the summary the judge reads.
 //
-// It never deletes the output directory: the grader runs this program with
-// /output as a bind mount, and removing a bind mount fails (EBUSY), which
+// It never deletes the output directory. The grader runs this program with
+// /output as a bind mount, and removing a bind mount fails (EBUSY) — which
 // would end the grade run with exit code 1. Creating the directory and
 // copying over it is all this program ever needs to do.
+//
+// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
+//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { cpSync, mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-frontend.ts';
 
-const repoDir = dirname(fileURLToPath(import.meta.url));
-const outputDir = process.env.MAKEFUN_OUTPUT_DIR || '/output';
+const here = fileURLToPath(new URL('.', import.meta.url));
+const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-mkdirSync(outputDir, { recursive: true });
-cpSync(join(repoDir, 'app'), join(outputDir, 'app'), { recursive: true });
-cpSync(join(repoDir, 'screenshots'), join(outputDir, 'screenshots'), { recursive: true });
+mkdirSync(out, { recursive: true });
+cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
+mkdirSync(join(out, 'screenshots'), { recursive: true });
+if (existsSync(join(here, 'screenshots'))) {
+  cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
+}
+
+// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the
+// bytes; the others refuse an entry the scorer would refuse (more than 4
+// screenshots or one over 256 KiB; more than 993 files and directories in
+// app/ or 48 MiB of app files).
 writeFileSync(
-  join(outputDir, 'dossier.json'),
-  buildDossier(outputDir, {
+  join(out, 'dossier.json'),
+  buildDossier(out, {
     text_max_bytes: 163840,
     screenshots: { max: 4, max_bytes: 262144 },
     app_max_files: 993,
