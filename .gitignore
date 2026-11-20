@@ -1,3 +1,10 @@
-out/
+# Leonida Trophy Compass v4 — ignore local build and runtime artefacts.
+# (Fresh file for the v4 rebuild; the repo keeps source + screenshots only.)
 node_modules/
+out/
+/output
+*.log
 .DS_Store
+Thumbs.db
+coverage/
+dist/

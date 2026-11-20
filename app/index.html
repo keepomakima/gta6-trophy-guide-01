@@ -1,123 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Offline GTA VI trophy guide and tracker: all 55 trophies with cited per-trophy guides, a 12-session planner, a phase roadmap, and an honest flag for the 7 trophies whose method is still unconfirmed. No account, no network — progress stays in your browser.">
-<title>Leonida Platinum Field Guide — GTA VI Trophy Guide &amp; Tracker</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2314101d'/%3E%3Ctext x='16' y='22' font-size='15' font-family='sans-serif' font-weight='bold' fill='%237df9ff' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Leonida Trophy Compass — an offline guide and tracker for all 55 Grand Theft Auto VI trophies: sourced per-trophy guides, a missable-first route, a platinum roadmap and a source matrix.">
+<title>Leonida Trophy Compass — GTA VI Trophy Guide &amp; Tracker</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23120e1d'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23ff5da2' stroke-width='2.5'/%3E%3Cpath d='M16 8 L19 16 L16 24 L13 16 Z' fill='%2339d5e8'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
 <header class="hero">
-  <div class="hero-top">
-    <div>
-      <h1>Leonida Platinum Field Guide</h1>
-      <p class="tagline">Every <strong>GTA VI trophy</strong> — all 55, one platinum — with a cited guide for each, a 12-session plan, and a phase roadmap. <strong>Offline:</strong> no account, no network, progress saved in your browser only.</p>
-      <p class="sources-line">Names, descriptions and grades verified against <strong>Exophase &amp; PSNProfiles</strong>, 20 Nov 2026. The 7 unconfirmed trophies are flagged as guesses, not facts.</p>
+  <div class="hero-inner">
+    <p class="eyebrow">Grand Theft Auto VI &middot; PlayStation 5 &middot; offline guide</p>
+    <h1>Leonida Trophy Compass</h1>
+    <p class="tagline">All 55 trophies, one route to platinum. Sourced guides, a missable-first plan, and a tracker that remembers where you are.</p>
+    <div class="hero-stats" id="heroStats" aria-live="polite"></div>
+    <div class="progress-wrap">
+      <div class="ring" id="progressRing" role="img" aria-label="Platinum progress"><span id="ringText">0%</span></div>
+      <div class="progress-text">
+        <p class="big" id="progressBig">0 / 55 earned</p>
+        <p class="sub" id="progressSub">Platinum is about 200 hours away — the route below shows the order.</p>
+        <div class="bar"><div class="bar-fill" id="progressBar" style="width:0%"></div></div>
+        <p class="sub" id="hoursLeft"></p>
+      </div>
     </div>
-    <div class="plat-box">
-      <div class="plat-big"><span id="statEarned">0</span><span class="plat-of"> / 55</span></div>
-      <div class="plat-label">Trophies earned</div>
-      <div class="progress"><div class="progress-fill" id="statBar" style="width:0%"></div></div>
-      <div class="plat-sub"><span id="statPct">0%</span> · <span id="statHours"></span></div>
-    </div>
+    <ol class="start-here" aria-label="Start here">
+      <li><strong>1 &middot; Do the meditation first.</strong> In Chapter 1, the morning after Down to Earth, follow Lucia to the balcony and meditate. It may be missable.</li>
+      <li><strong>2 &middot; Play the story.</strong> Chapters 1&ndash;5, side quests as they appear. Nothing else in the story can be missed.</li>
+      <li><strong>3 &middot; Clean up with the checklist.</strong> After the credits, the 100% checklist opens — that is the long road to A Long Road.</li>
+    </ol>
+    <p class="missable-callout" role="alert"><strong>One trophy can be missed:</strong> Positive Mental Attitude — meditate at all 18 spots. The Chapter 1 balcony meditation with Lucia disappears after Chapter 1. Keep a manual save at the start of every chapter.</p>
   </div>
-  <div class="stats-strip" id="statsStrip"></div>
-  <p class="missable-callout"><strong>⚠ Only 1 missable trophy:</strong> meditate at the spot at Jason&rsquo;s house <strong>before finishing Chapter 1</strong> — there is no mission replay. Keep a manual save at the chapter transition.</p>
 </header>
 
-<div class="toolbar">
-  <input type="search" id="search" placeholder="Search trophies, guides…" aria-label="Search trophies">
-  <select id="gradeFilter" aria-label="Filter by grade">
-    <option value="">All grades</option>
-    <option value="platinum">Platinum</option>
-    <option value="gold">Gold</option>
-    <option value="silver">Silver</option>
-    <option value="bronze">Bronze</option>
-  </select>
-  <select id="catFilter" aria-label="Filter by category">
-    <option value="">All categories</option>
-  </select>
-  <select id="phaseFilter" aria-label="Filter by phase">
-    <option value="">All phases</option>
-    <option value="1">Phase 1 · Story</option>
-    <option value="2">Phase 2 · Strangers</option>
-    <option value="3">Phase 3 · Activities</option>
-    <option value="4">Phase 4 · Cleanup</option>
-  </select>
-  <label class="check"><input type="checkbox" id="remainingOnly"> Remaining only</label>
-  <label class="check"><input type="checkbox" id="spoilerToggle"> Show story spoilers</label>
-  <span class="spacer"></span>
-  <button id="exportBtn" type="button">Export progress</button>
-  <button id="importBtn" type="button">Import progress</button>
-  <input type="file" id="importFile" accept="application/json" hidden>
-  <button id="printBtn" type="button">Print checklist</button>
-  <button id="resetBtn" type="button" class="danger">Reset</button>
-</div>
-
-<nav class="tabs" aria-label="Guide sections">
-  <button type="button" class="tab active" data-tab="checklist">Checklist</button>
-  <button type="button" class="tab" data-tab="planner">Session Planner</button>
-  <button type="button" class="tab" data-tab="roadmap">Roadmap</button>
-  <button type="button" class="tab" data-tab="sources">Sources &amp; Method</button>
+<nav class="tabs" aria-label="Views">
+  <button data-view="guide" class="active" aria-current="page">Guide &amp; Tracker</button>
+  <button data-view="route">Route Planner</button>
+  <button data-view="roadmap">Roadmap</button>
+  <button data-view="sources">Source Matrix</button>
 </nav>
 
 <main>
-  <section class="tabpage active" id="tab-checklist">
-    <p class="intro">Tick a box when you earn a trophy in-game — progress is stored in this browser only. Click any trophy to open its full guide in the detail panel. Hidden story trophies stay masked until you earn them or turn on spoilers.</p>
-    <div class="layout">
-      <div>
-        <p class="list-meta" id="listMeta">Loading trophies…</p>
-        <ul class="trophy-list" id="trophyList"></ul>
-        <p class="list-meta">Sources: trophy names, descriptions and grades verified against Exophase &amp; PSNProfiles, 20 Nov 2026. Hours are estimates of trophy work (overlapping, not additive). The 7 trophies flagged &ldquo;Method unconfirmed&rdquo; have no verified method yet — their guides are the leading community reading, marked as guesses.</p>
-      </div>
-      <aside class="detail-col" id="detailPanel" aria-live="polite">
-        <p class="detail-empty">Loading…</p>
+  <section id="view-guide" class="view active" aria-label="Guide and tracker">
+    <div class="toolbar">
+      <label class="search">Search <input id="q" type="search" placeholder="Trophy, mission, place&hellip;" autocomplete="off"></label>
+      <label>Kind
+        <select id="fKind">
+          <option value="">All kinds</option>
+          <option value="story">Story</option>
+          <option value="activities">Activities</option>
+          <option value="collectibles">Collectibles</option>
+          <option value="platinum">Platinum</option>
+        </select>
+      </label>
+      <label>Grade
+        <select id="fGrade">
+          <option value="">All grades</option>
+          <option value="platinum">Platinum</option>
+          <option value="gold">Gold</option>
+          <option value="silver">Silver</option>
+          <option value="bronze">Bronze</option>
+        </select>
+      </label>
+      <label>Status
+        <select id="fStatus">
+          <option value="">All</option>
+          <option value="earned">Earned</option>
+          <option value="remaining">Remaining</option>
+        </select>
+      </label>
+      <label>Sort
+        <select id="fSort">
+          <option value="route">Route order</option>
+          <option value="name">Name A&ndash;Z</option>
+          <option value="difficulty">Hardest first</option>
+          <option value="hours">Longest first</option>
+        </select>
+      </label>
+      <label>Spoilers
+        <select id="fSpoiler">
+          <option value="mask">Mask hidden names</option>
+          <option value="hide">Hide hidden trophies</option>
+          <option value="show">Show everything</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" id="fMissable"> Missable only</label>
+      <label class="check"><input type="checkbox" id="fUnconfirmed"> Unconfirmed only</label>
+    </div>
+    <p class="result-count" id="resultCount" aria-live="polite"></p>
+    <div class="split">
+      <ul class="trophy-list" id="trophyList"></ul>
+      <aside class="detail" id="detail" aria-live="polite">
+        <p class="detail-empty">Select a trophy to see its guide, sources and your note.</p>
       </aside>
     </div>
   </section>
 
-  <section class="tabpage" id="tab-planner">
-    <h2>Session Planner — 12 sessions to the platinum</h2>
-    <p class="intro">Each session is one sitting: a goal, the trophies it can pop, and the warning that matters for that sitting. Sessions follow the story order, so the one missable trophy is covered in Session 1–2. Tick a session done when you finish it.</p>
-    <div id="planner"></div>
+  <section id="view-route" class="view" aria-label="Route planner">
+    <h2>Route planner — missable first, then the story, then the sweep</h2>
+    <p>The route orders the 55 trophies the way a platinum run actually flows. Do the missable step now, let the story carry you through the middle, and save the grind for free roam. Each stop shows what is still left in it and how long it should take.</p>
+    <p class="next-up" id="nextUp"></p>
+    <div id="routeGroups"></div>
   </section>
 
-  <section class="tabpage" id="tab-roadmap">
-    <h2>Roadmap — four phases, ~200 hours</h2>
-    <p class="intro">The platinum is a journey, not a grind: story first, strangers second, the long middle of activities and collectibles third, and money plus 100% cleanup last. Hours are trophy work per phase and overlap — the journey is about 200 hours in total.</p>
-    <div class="phase-grid" id="roadmap"></div>
-    <div class="roadmap-note">
-      <p>Work the 100% completion checklist in the Progress menu during Phase 4 — it tells you exactly which buckets are short, instead of relying on memory. Gold the last Shooting Range challenges, then let A Long Road — and the platinum — pop.</p>
-    </div>
+  <section id="view-roadmap" class="view" aria-label="Roadmap to platinum">
+    <h2>Roadmap to platinum — about 200 hours</h2>
+    <p>Five phases. Phases 1&ndash;3 are the story (roughly 60 hours of play); phase 4 is the clean-up (the long part); phase 5 is the 100% checklist and the platinum itself. Times are estimates from GTABase and KeenGamer; Push Square allows up to 300+ hours.</p>
+    <div id="roadmapPhases"></div>
+    <h3>Rules that protect the run</h3>
+    <ul class="rules">
+      <li><strong>Save at every chapter start</strong> — there is no mission replay, so a manual save is your only rewind.</li>
+      <li><strong>Never skip Lucia&rsquo;s balcony meditation</strong> in Chapter 1 — it is the only possibly missable step.</li>
+      <li><strong>Turn on progress notifications</strong> in Settings (progress, collectibles, Criminal Profile) so nothing fills up silently.</li>
+      <li><strong>Keep cheats off</strong> — a cheat disables trophies and saving.</li>
+      <li><strong>Do not push toward the Irredeemable criminal profile</strong> — it is permanent.</li>
+      <li><strong>Meditate with both characters together</strong> when you can — it counts twice toward the 18 spots.</li>
+    </ul>
   </section>
 
-  <section class="tabpage" id="tab-sources">
-    <h2>Sources &amp; Method</h2>
-    <p><strong>What is verified:</strong> every trophy name, description, grade (platinum / gold / silver / bronze) and hidden status was checked against Exophase and PSNProfiles on 20 Nov 2026. Where the two lists disagreed, the guide says so in the trophy&rsquo;s source line.</p>
-    <p><strong>What is not verified:</strong> 7 trophies have no confirmed method yet. Their guides give the leading community reading and are flagged <strong>&ldquo;Method unconfirmed&rdquo;</strong> in the list, the detail panel and the planner — a guess is labelled a guess, never presented as a fact.</p>
-    <p><strong>Hours:</strong> per-trophy hours are estimates of trophy work. They overlap (driving, scanning and exploring count toward several trophies at once), so they must not be added up — the whole journey is about 200 hours.</p>
-    <table class="source-table">
-      <thead><tr><th>Source</th><th>Used for</th></tr></thead>
-      <tbody>
-        <tr><td>Exophase — GTA VI trophy list</td><td>Names, descriptions, grades, hidden flags</td></tr>
-        <tr><td>PSNProfiles — GTA VI trophy list</td><td>Cross-check of names, descriptions, grades, hidden flags</td></tr>
-        <tr><td>Rockstar Games newswire &amp; official channels</td><td>Story context and official wording</td></tr>
-        <tr><td>Community guides (cited per trophy)</td><td>Step-by-step methods; flagged unconfirmed where unverified</td></tr>
-      </tbody>
-    </table>
-    <p><strong>Privacy:</strong> this guide makes no network calls. Trophy data loads from a local file and progress lives in your browser&rsquo;s local storage — nothing leaves your device. Export and import are plain JSON files you control.</p>
+  <section id="view-sources" class="view" aria-label="Source matrix">
+    <h2>Source matrix — what each source confirms</h2>
+    <p>Every name, description and grade in this guide was cross-checked trophy by trophy between two full lists read on 20 Nov 2026 — Insider Gaming (18 Nov 2026) and GTABase (18 Nov 2026). They agree on 55 of 55. The same 55 appear on Exophase and PSNProfiles, per Planet GTA 6, which took its list from Exophase and cross-checked it with PSNProfiles and TrueAchievements. Methods come mainly from GTABase; where a method is still unconfirmed, the guide says so instead of inventing one.</p>
+    <div id="sourceMatrix"></div>
+    <h3>How to read the honesty labels</h3>
+    <ul class="rules">
+      <li><strong>Confirmed</strong> — the method is reported by a guide that has verified it.</li>
+      <li><strong>Partially confirmed</strong> — the place or shape of the task is known, but the exact steps are not yet verified.</li>
+      <li><strong>Method unconfirmed</strong> — seven trophies whose descriptions hint at the task but whose steps no source has verified. The guide gives the hint and the reported lead, and nothing more.</li>
+    </ul>
+    <p class="fineprint">All guide text in this app is written in the author's own words. Trophy names and descriptions are the official text as listed by the sources above; they are facts, quoted as the list gives them. This guide is unofficial and not affiliated with Rockstar Games.</p>
   </section>
 </main>
 
 <footer>
-  <p>Leonida Platinum Field Guide — an unofficial fan-made GTA VI trophy guide and tracker. Not affiliated with Rockstar Games or Sony Interactive Entertainment.</p>
-  <p>Works offline. Progress is stored in this browser only.</p>
+  <div class="footer-actions">
+    <button id="btnExport" type="button">Export progress (.json)</button>
+    <label class="import-label" for="fileImport">Import progress<input id="fileImport" type="file" accept=".json,application/json" hidden></label>
+    <button id="btnPrint" type="button">Print / save as PDF</button>
+    <button id="btnReset" type="button" class="danger">Reset progress</button>
+  </div>
+  <p class="fineprint">Leonida Trophy Compass — an offline, open-source GTA VI trophy guide and tracker. Works from its own files with no network. Data checked 20 Nov 2026 against Insider Gaming and GTABase. Game not yet released at the time of writing: methods marked unconfirmed are labelled as such.</p>
+  <p class="fineprint" id="saveState" aria-live="polite"></p>
 </footer>
 
-<noscript><p style="padding:0 20px">This guide needs JavaScript: the trophy list, planner and roadmap are rendered from a local data file.</p></noscript>
 <script src="js/app.js"></script>
 </body>
 </html>
