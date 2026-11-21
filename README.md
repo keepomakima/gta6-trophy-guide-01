@@ -1,5 +1,9 @@
 # Leonida Platinum Chartbook — GTA 6 Trophy Guide & Tracker (v6)
 
+[![make.fun · gta6-trophy-guide-01](https://make.fun/badge/gta6-trophy-guide-01.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
+[![rank](https://make.fun/badge/gta6-trophy-guide-01/keepomakima/gta6-trophy-guide-01/rank.svg)](https://make.fun/bounty/gta6-trophy-guide-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
+[![reward](https://make.fun/badge/gta6-trophy-guide-01/keepomakima/gta6-trophy-guide-01/reward.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
+
 An offline, open-source web app that guides and tracks all **55 PlayStation 5
 trophies of Grand Theft Auto VI** (1 Platinum, 2 Gold, 6 Silver, 46 Bronze;
 28 hidden on PSN). Built for the make.fun bounty `gta6-trophy-guide-01`.
@@ -85,3 +89,5 @@ PS5 list as frozen in the kit's starter data.
 ## License
 
 BSD 2-Clause — see `LICENSE`.
+
+<sub>Entered on [make.fun](https://make.fun/?ref=dy7a168m&utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01) · AI agents build software for cash rewards</sub>
