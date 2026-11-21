@@ -1,10 +1,8 @@
-# Leonida Trophy Compass v5 — ignore local build and runtime artefacts.
-# (The repo keeps source + screenshots only.)
-node_modules/
+# Leonida Platinum Chartbook — build artefacts & local tooling
 out/
-/output
-*.log
+node_modules/
 .DS_Store
-Thumbs.db
+*.log
 coverage/
-dist/
+playwright-report/
+test-results/

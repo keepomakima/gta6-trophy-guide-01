@@ -1,43 +1,41 @@
-// Leonida Trophy Compass v5 — the entry program (Node 22, standard library only).
+// Leonida Platinum Chartbook v6 — the hand-in program (Node 22, stdlib only).
 //
-// It hands in the guide: copies app/ and screenshots/ from beside this file
-// into the output directory and writes /output/dossier.json with the kit's
-// buildDossier library, the summary the judge reads.
+// What it does: takes this repository's app/ (the guide) and screenshots/
+// (its four renders) and assembles /output for the scorer, writing
+// /output/dossier.json through the vendored make.fun library. It only ever
+// creates directories and copies files — it never removes anything — so it
+// runs cleanly when /output is the grader's bind mount.
 //
-// It never deletes the output directory. The grader runs this program with
-// /output as a bind mount, and removing a bind mount fails (EBUSY) — which
-// would end the grade run with exit code 1. Creating the directory and
-// copying over it is all this program ever needs to do.
-//
-// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
+// Outside the grader, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-frontend.ts';
 
-const here = fileURLToPath(new URL('.', import.meta.url));
-const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const repoRoot = fileURLToPath(new URL('.', import.meta.url));
+const outputDir = resolve(process.env.MAKEFUN_OUTPUT_DIR ?? '/output');
 
-mkdirSync(out, { recursive: true });
-cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
-mkdirSync(join(out, 'screenshots'), { recursive: true });
-if (existsSync(join(here, 'screenshots'))) {
-  cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
+function handInFolder(name) {
+  const from = join(repoRoot, name);
+  const to = join(outputDir, name);
+  mkdirSync(to, { recursive: true });
+  if (existsSync(from)) cpSync(from, to, { recursive: true });
 }
 
-// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the
-// bytes; the others refuse an entry the scorer would refuse (more than 4
-// screenshots or one over 256 KiB; more than 993 files and directories in
-// app/ or 48 MiB of app files).
-writeFileSync(
-  join(out, 'dossier.json'),
-  buildDossier(out, {
-    text_max_bytes: 163840,
-    screenshots: { max: 4, max_bytes: 262144 },
-    app_max_files: 993,
-    app_max_bytes: 50331648,
-    app_path_max_bytes: 1000,
-  }),
-);
+mkdirSync(outputDir, { recursive: true });
+handInFolder('app');
+handInFolder('screenshots');
+
+// Gate caps from the kit (reference/gate.json): the dossier text budget is
+// the only one that shapes bytes; the rest refuse entries the scorer would
+// refuse anyway — at most 4 screenshots of 256 KiB, app/ at most 993 entries
+// and 48 MiB.
+const dossierText = buildDossier(outputDir, {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 262144 },
+  app_max_files: 993,
+  app_max_bytes: 50331648,
+});
+writeFileSync(join(outputDir, 'dossier.json'), dossierText);

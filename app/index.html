@@ -3,123 +3,149 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leonida Trophy Compass — GTA VI trophy guide &amp; tracker</title>
-<link rel="icon" href="data:,">
+<title>Leonida Platinum Chartbook — GTA 6 Trophy Guide &amp; Tracker</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header class="topbar">
   <div class="brand">
-    <strong>LEONIDA TROPHY COMPASS</strong>
-    <span class="brand-sub">GTA VI · PS5 · 55 trophies · offline guide &amp; tracker</span>
+    <h1>LEONIDA PLATINUM CHARTBOOK</h1>
+    <p class="tag">GTA 6 &middot; 55 trophies &middot; offline tracker &middot; every guide cited</p>
   </div>
-  <div class="top-actions">
-    <span class="earned" id="earnedLine" aria-live="polite">0 / 55 earned</span>
-    <span class="minibar" aria-hidden="true"><span id="miniBarFill" style="width:0%"></span></span>
-    <label class="spoiler-label">Spoilers
-      <select id="fSpoiler" aria-label="Spoiler setting">
-        <option value="show">Show all</option>
-        <option value="mask" selected>Hide hidden names</option>
-        <option value="hide">Hide hidden rows</option>
-      </select>
-    </label>
-    <button id="btnExport" type="button">Export</button>
-    <label class="import-label" for="fileImport">Import<input id="fileImport" type="file" accept=".json,application/json" hidden></label>
-    <button id="btnPrint" type="button">Print</button>
-    <button id="btnReset" type="button" class="danger">Reset</button>
+  <nav class="tabs" aria-label="Views">
+    <a href="#/guide" data-view="guide">Guide</a>
+    <a href="#/route" data-view="route">Route Planner</a>
+    <a href="#/roadmap" data-view="roadmap">Roadmap</a>
+    <a href="#/sources" data-view="sources">Sources</a>
+  </nav>
+  <div class="progress" id="progressBox" aria-label="Progress">
+    <span class="big" id="earnedCount">0/55</span>
+    <span class="bar"><span id="earnedBar"></span></span>
+    <span class="pct" id="earnedPct">0%</span>
   </div>
 </header>
 
-<div class="audit" id="auditStrip" aria-live="polite">Loading audit…</div>
-
-<nav class="tabs" aria-label="Views">
-  <button data-view="guide" class="active" aria-current="page">Guide &amp; Tracker</button>
-  <button data-view="route">Route Planner</button>
-  <button data-view="roadmap">Roadmap</button>
-  <button data-view="sources">Source Matrix</button>
-</nav>
+<div class="audit" id="auditStrip" role="note">Loading audit&hellip;</div>
 
 <main>
-  <section id="view-guide" class="view active" aria-label="Guide and tracker">
+  <!-- ============ GUIDE / WORKBENCH ============ -->
+  <section id="view-guide" class="view">
     <div class="workbench">
-      <div class="col col-list">
-        <div class="nextup" id="nextUp"></div>
-        <div class="filters">
-          <label class="search">Search
-            <input id="q" type="search" placeholder="Trophy, mission, place…" autocomplete="off">
-          </label>
-          <div class="filter-row">
-            <label>Kind
-              <select id="fKind">
-                <option value="all">All kinds</option>
-                <option value="story">Story</option>
-                <option value="quests">Quests</option>
-                <option value="robberies">Robberies</option>
-                <option value="collectibles">Collectibles</option>
-                <option value="activities">Activities</option>
-                <option value="misc">Misc</option>
-                <option value="platinum">Platinum</option>
-              </select>
-            </label>
-            <label>Grade
-              <select id="fGrade">
-                <option value="all">All grades</option>
-                <option value="platinum">Platinum</option>
-                <option value="gold">Gold</option>
-                <option value="silver">Silver</option>
-                <option value="bronze">Bronze</option>
-              </select>
-            </label>
+      <aside class="col list-col" aria-label="Trophy checklist">
+        <div class="list-tools">
+          <input id="search" type="search" placeholder="Search trophy or mission&hellip;" aria-label="Search trophies">
+          <div class="filters">
+            <select id="filterKind" aria-label="Filter by kind">
+              <option value="">All kinds</option>
+              <option value="story">Story</option>
+              <option value="stranger">Strangers</option>
+              <option value="activity">Activities</option>
+              <option value="collectible">Collectibles</option>
+              <option value="crime">Crime &amp; robberies</option>
+              <option value="exploration">Exploration</option>
+              <option value="misc">Miscellaneous</option>
+              <option value="completion">Completion</option>
+            </select>
+            <select id="filterGrade" aria-label="Filter by grade">
+              <option value="">All grades</option>
+              <option value="platinum">Platinum</option>
+              <option value="gold">Gold</option>
+              <option value="silver">Silver</option>
+              <option value="bronze">Bronze</option>
+            </select>
+            <select id="filterStatus" aria-label="Filter by status">
+              <option value="">All statuses</option>
+              <option value="earned">Earned</option>
+              <option value="todo">Not earned</option>
+              <option value="missable">Missable / at risk</option>
+              <option value="hidden">PSN-hidden</option>
+            </select>
+            <select id="spoilerMode" aria-label="Spoiler setting">
+              <option value="hide">Spoilers: hide story</option>
+              <option value="blur">Spoilers: blur story</option>
+              <option value="show">Spoilers: show all</option>
+            </select>
           </div>
-          <div class="filter-row">
-            <label>Status
-              <select id="fStatus">
-                <option value="all">All</option>
-                <option value="todo">Not earned</option>
-                <option value="earned">Earned</option>
-              </select>
-            </label>
-            <label>Sort
-              <select id="fSort">
-                <option value="route">Route order</option>
-                <option value="name">Name A–Z</option>
-                <option value="difficulty">Hardest first</option>
-                <option value="hours">Most hours first</option>
-              </select>
-            </label>
-          </div>
-          <div class="filter-row checks">
-            <label class="check"><input type="checkbox" id="fMissable"> Missable only</label>
-            <label class="check"><input type="checkbox" id="fFlagged"> Flagged only</label>
-          </div>
+          <div class="list-meta"><span id="shownCount"></span> <button id="resetFilters" type="button">Clear</button></div>
         </div>
-        <p class="result-count" id="resultCount" aria-live="polite"></p>
-        <ul class="trophy-list" id="trophyList"></ul>
-      </div>
+        <ol id="trophyList" class="trophy-list"></ol>
+      </aside>
 
-      <article class="col col-detail" id="detail" aria-live="polite"></article>
+      <article class="col detail-col" id="detailPane" aria-label="Trophy detail" tabindex="-1"></article>
 
-      <aside class="col col-sources" id="sourcesPanel" aria-label="Sources"></aside>
+      <aside class="col rail-col" aria-label="Next up and sources">
+        <section class="card nextup">
+          <h2>NEXT UP &mdash; missable-first</h2>
+          <ol id="nextUpList"></ol>
+          <p class="fine">Order: the 1 possibly missable trophy, then the 5 at-risk
+          stranger finals, then the hardest remaining (100% first), then the rest
+          by phase.</p>
+        </section>
+        <section class="card guide-sources">
+          <h2>SOURCES FOR THIS GUIDE</h2>
+          <ol id="detailSources" class="src-list"></ol>
+        </section>
+        <section class="card save-card">
+          <h2>SAVE &amp; SHARE</h2>
+          <div class="save-btns">
+            <button id="exportBtn" type="button">Export progress (.json)</button>
+            <label class="import-label">Import progress<input id="importFile" type="file" accept=".json,application/json" hidden></label>
+          </div>
+          <p class="fine">Progress lives only in this browser (localStorage).
+          Export downloads a real file; import reads a file you pick.</p>
+          <p class="fine" id="saveState"></p>
+        </section>
+      </aside>
     </div>
   </section>
 
-  <section id="view-route" class="view" aria-label="Route planner">
-    <p class="next-up-line" id="nextUpRoute"></p>
-    <div id="routeGroups"></div>
+  <!-- ============ ROUTE PLANNER ============ -->
+  <section id="view-route" class="view" hidden>
+    <div class="page-head">
+      <h2>ROUTE PLANNER &mdash; missable-first</h2>
+      <p>Do the time-locked thing first, then the story, then the 100% grind.
+      Hours are the published estimates (PowerPyx / KeenGamer: ~200 h to
+      platinum; Push Square: 300+ h &mdash; shown both ways).</p>
+      <p class="route-total" id="routeTotal"></p>
+    </div>
+    <div id="routeList" class="route-list"></div>
   </section>
 
-  <section id="view-roadmap" class="view" aria-label="Roadmap to platinum">
-    <div id="roadmapPhases"></div>
+  <!-- ============ ROADMAP ============ -->
+  <section id="view-roadmap" class="view" hidden>
+    <div class="page-head">
+      <h2>ROADMAP TO THE PLATINUM &mdash; 5 phases</h2>
+      <p>One playthrough is enough. No mission replay, no New Game+, 15 manual
+      save slots &mdash; keep a save at the start and end of every chapter.
+      Cheats disable trophies and saving: keep them off the platinum run.</p>
+    </div>
+    <div id="roadmapList" class="roadmap-list"></div>
+    <div class="page-head"><h2>100% COMPLETION CHECKLIST &mdash; what A Long Road actually asks</h2></div>
+    <table class="check-table" id="checklistTable"></table>
   </section>
 
-  <section id="view-sources" class="view" aria-label="Source matrix">
-    <div id="sourceMatrix"></div>
+  <!-- ============ SOURCES ============ -->
+  <section id="view-sources" class="view" hidden>
+    <div class="page-head">
+      <h2>SOURCE MATRIX &mdash; every fact cited</h2>
+      <p>20 sites consulted 21 Nov 2026. Trophy names, descriptions and grades
+      follow the official PS5 list (Exophase / PSNProfiles, frozen 18 Nov 2026).
+      Guides are written in our own words from these sources &mdash; never copied.</p>
+    </div>
+    <table class="matrix" id="sourceMatrix"></table>
+    <div class="page-head"><h2>SOURCES DIFFER &mdash; shown both ways</h2></div>
+    <div id="disputeList" class="dispute-list"></div>
+    <div class="page-head"><h2>AUDIT &mdash; counted from the data</h2></div>
+    <div id="auditDetail" class="audit-detail"></div>
   </section>
 </main>
 
 <footer>
-  <p class="fineprint" id="saveState" aria-live="polite"></p>
-  <p class="fineprint">Unofficial fan guide. Trophy names and descriptions are Rockstar's; the guides, route and checks are this guide's own words, written from the five sources listed. No network is needed — everything runs from these files. Cheats disable trophies and saving, so keep them off a trophy run. Data read 20 Nov 2026.</p>
+  <p>Leonida Platinum Chartbook &middot; GTA 6 trophy guide &amp; tracker &middot;
+  offline, open source (BSD 2-Clause) &middot; no Rockstar artwork, no logo,
+  no network requests. Trophy names &amp; descriptions as PlayStation publishes
+  them; guides are our own words, cited. Game released 19 Nov 2026 &mdash;
+  methods still being confirmed are flagged, not invented.</p>
 </footer>
 
 <script src="js/app.js"></script>

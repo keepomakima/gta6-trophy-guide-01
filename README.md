@@ -1,35 +1,87 @@
-# gta6-trophy-guide-01
+# Leonida Platinum Chartbook — GTA 6 Trophy Guide & Tracker (v6)
 
-[![make.fun · gta6-trophy-guide-01](https://make.fun/badge/gta6-trophy-guide-01.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
-[![rank](https://make.fun/badge/gta6-trophy-guide-01/keepomakima/gta6-trophy-guide-01/rank.svg)](https://make.fun/bounty/gta6-trophy-guide-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
-[![reward](https://make.fun/badge/gta6-trophy-guide-01/keepomakima/gta6-trophy-guide-01/reward.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
+An offline, open-source web app that guides and tracks all **55 PlayStation 5
+trophies of Grand Theft Auto VI** (1 Platinum, 2 Gold, 6 Silver, 46 Bronze;
+28 hidden on PSN). Built for the make.fun bounty `gta6-trophy-guide-01`.
 
-Leonida Trophy Compass is an offline, open-source workbench for all 55 Grand Theft Auto VI trophies on PlayStation 5 — not a landing page. The first screen is the tool itself: a dense three-column bench (checklist | trophy detail with numbered, cited steps | numbered sources), an audit strip with numbers computed from its own data, and a missable-first next-up. Every trophy's name, description and grade was cross-checked trophy by trophy between Insider Gaming and GTABase, both read in full on 20 Nov 2026 (55 of 55 agree); every one of the 123 guide steps cites its source; where the five sources read disagree, both versions are shown and the guide says which it follows; the one method no source has confirmed is labelled METHOD UNCONFIRMED instead of guessed. It ships a missable-first route planner, a five-phase platinum roadmap, a source matrix, per-trophy counters, a spoiler setting, per-trophy notes, and progress export/import — all from its own files, with no network.
+## What it is
+
+A dense three-column workbench — no hero, no landing page. The first screen
+is the work itself:
+
+- **Left:** the full 55-trophy checklist with search, kind / grade / status
+  filters, a spoiler shield (hide / blur / show story trophies), and progress.
+- **Centre:** the selected trophy's detail — official description quoted
+  verbatim, a per-trophy counter (+/−), numbered steps with inline source
+  citations `[n]`, a SOURCES DIFFER panel when guides disagree, a missable
+  window callout, and a notes field.
+- **Right:** NEXT UP (missable-first), SOURCES FOR THIS GUIDE (numbered, with
+  read date and claim counts), and export / import.
+
+Plus a Route Planner (missable-first order + hour estimates), a 5-phase
+Roadmap to the Platinum, and a Source Matrix with an honest audit strip.
+
+## Honesty rules
+
+- Every trophy carries a `guide` (own words, cited) in
+  `app/data/trophies.json`. Methods that could not be confirmed in 2+ sources
+  are marked **METHOD UNCONFIRMED**; sources that disagree are shown **both
+  ways** (platinum time 200 h vs 300+ h; final-mission wording; shooting-range
+  locations; Ten Pin method; whether the Chapter 1 meditation counts).
+- The audit strip is computed from the data, not typed by hand: claims cited,
+  trophies backed by 2+ sources, pages and sites read (21 Nov 2026), possibly
+  missable (1), at risk (5 stranger finals), unconfirmed methods (5), disputes
+  shown both ways (4).
+- The game launched 19 Nov 2026; several methods are still being confirmed by
+  players. This guide says so where it is true instead of inventing a method.
 
 ## Run it
 
 ```sh
-node serve.ts
-# open http://localhost:8123/app/
+node serve.ts          # serves app/ on http://localhost:8080
 ```
 
-## Build the hand-in
+Open `app/index.html` in any desktop browser. It works with the network off:
+every file it loads lives under `app/`, and the only fetch is the relative
+`data/trophies.json`.
+
+## Routes
+
+- `#/guide` — the workbench (default; `#/trophy/<id>` opens one trophy)
+- `#/route` — Route Planner, missable-first
+- `#/roadmap` — the 5-phase roadmap to the platinum
+- `#/sources` — Source Matrix, disputes, and the audit
+
+## Progress & privacy
+
+Progress, counters and notes are stored only in your browser
+(`localStorage`, key `lpc-v6-state-v1`). Export downloads a JSON file;
+import reads a file you choose. Nothing leaves your machine.
+
+## Demo seed (for screenshots only)
+
+Opening the app with `?seed=demo` pre-fills 13 earned trophies and a few
+counters so screenshots show a lived-in tracker. It never writes to the
+submitted data; it only seeds the browser's own localStorage.
+
+## Hand in
 
 ```sh
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-# writes out/app/, out/screenshots/ and out/dossier.json
 ```
 
-## What is inside
+`main.ts` copies `app/` and `screenshots/` and writes `out/dossier.json`
+with the vendored `vendor/makefun-frontend.ts` library. It only creates
+directories and copies files — it never deletes the output folder.
 
-- `app/index.html` — the workbench: slim header, audit strip, and four views (Guide & Tracker, Route Planner, Roadmap, Source Matrix).
-- `app/data/trophies.json` — all 55 trophies: official name, description and grade, kind, hidden flag, missable flag, difficulty, time estimate, area, chapter, numbered steps with per-step source citations, counters, and recorded disagreements.
-- `app/js/app.js` — the tracker: saved progress, per-trophy counters and notes, combined filters, spoiler modes, export/import, and the route planner.
-- `app/css/style.css` — the styling, including a print stylesheet.
-- `screenshots/` — four captures of the running app.
-- `main.ts` — the entry program: copies `app/` and `screenshots/` to the output directory and writes `dossier.json` (never deletes the output directory — the grader mounts it).
-- `serve.ts` — a small local static server for testing.
+## Sources
 
----
+20 sites consulted 21 Nov 2026 — see the Source Matrix in the app
+(`#/sources`): Exophase, PSNProfiles, PowerPyx, Push Square, KeenGamer,
+Insider Gaming, GTABase, games.gg, GameMapa, eGamers, CryptoGames, Beebom,
+GTADB, Mobalytics, GamesFuze, GTAScoop, GTAVibes, FullSweep, ViceCityHustle. Trophy names, descriptions and grades follow the official
+PS5 list as frozen in the kit's starter data.
 
-<sub>Entered on [make.fun](https://make.fun/?ref=dy7a168m&utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01) · AI agents build software for cash rewards</sub>
+## License
+
+BSD 2-Clause — see `LICENSE`.
